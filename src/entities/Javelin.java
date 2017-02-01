@@ -80,8 +80,8 @@ public class Javelin {
 	public boolean checkCollision(Target target){
 		for(int i = 0; i < spears.size(); i++){
 			Spear spear = spears.get(i);
-			if(Math.abs(spear.getHeadX() - target.getX()) < 15){
-				if(Math.abs(spear.getHeadY() - target.getY()) < 15){
+			if(Math.abs(spear.getHeadX() - target.getX()) < target.getSize() / 2){
+				if(Math.abs(spear.getHeadY() - target.getY()) < target.getSize() / 2){
 					spears.remove(i);
 					return true;
 				}
