@@ -1,4 +1,4 @@
-package datastructures;
+package spears.datastructures;
 
 /*
  * Simple vector class to represent a vector on a plane

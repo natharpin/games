@@ -1,4 +1,4 @@
-package window;
+package spears.window;
 // Small class for keeping global variables about the window and playing field
 public class WindowSettings {
 	public static final String appName = "Spear Thrower";

@@ -1,11 +1,11 @@
-package entities;
+package spears.entities;
 
 import java.util.ArrayList;
 
-import datastructures.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import window.WindowSettings;
+import spears.datastructures.*;
+import spears.window.WindowSettings;
 
 /*
  * Javelin class tracks the mouse movements and generates projectile objects called spears. 

@@ -1,4 +1,4 @@
-package datastructures;
+package spears.datastructures;
 
 /*
  * Simple point class that holds two integer values, representing coordinate values on a plane

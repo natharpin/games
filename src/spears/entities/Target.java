@@ -1,10 +1,9 @@
-package entities;
+package spears.entities;
 
-import datastructures.Point;
-import datastructures.Vector;
+import spears.datastructures.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import window.WindowSettings;
+import spears.window.WindowSettings;
 
 /*
  * Simple target class

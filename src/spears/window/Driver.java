@@ -1,10 +1,10 @@
-package window;
+package spears.window;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import datastructures.*;
-import entities.*;
+import spears.datastructures.*;
+import spears.entities.*;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;

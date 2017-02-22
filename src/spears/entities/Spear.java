@@ -1,6 +1,6 @@
-package entities;
+package spears.entities;
 
-import datastructures.Vector;
+import spears.datastructures.Vector;
 import javafx.scene.canvas.GraphicsContext;
 
 /*
