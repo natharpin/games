@@ -17,6 +17,11 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+/*
+ * Small driver class to run spear throwing game
+ * Made by Nathan Arpin with boiler-plate code written by Dr. Mike Slattery
+ * Programming Computer Games
+ */
 public class Driver extends Application {
     private Javelin turret;
     private ArrayList<Target> targets;
@@ -66,6 +71,10 @@ public class Driver extends Application {
         }
     }
 
+    
+    /*
+     * Spawn new targets once all previous targets have been hit
+     */
     private void spawnTargets() {
         int numTargets = round % 5 + 1;
         int targetSpeed = round / 5 + 1;
@@ -80,10 +89,12 @@ public class Driver extends Application {
         round++;
     }
 
+    // Returns the lower of the two given integers
     private int lesser(int a, int b) {
         return (a < b) ? a : b;
     }
 
+    // Cycles through colors every fifth round
     private Color targetColor(int round) {
         switch (round % 21 / 5) {
             case 0:
@@ -101,6 +112,7 @@ public class Driver extends Application {
         }
     }
 
+    // Give a target a random initial direction
     private Point randomSpeedPoint(int targetSpeed) {
         if (rng.nextBoolean()) {
             if (rng.nextBoolean())

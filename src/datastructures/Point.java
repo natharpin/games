@@ -1,5 +1,8 @@
 package datastructures;
 
+/*
+ * Simple point class that holds two integer values, representing coordinate values on a plane
+ */
 public class Point {
 
 	private int x, y;
@@ -22,6 +25,7 @@ public class Point {
 		return y;
 	}
 	
+	// Moves a point by the values given
 	public void move(int dx, int dy){
 		x+= dx;
 		y+= dy;
