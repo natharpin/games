@@ -5,6 +5,7 @@ import java.util.Random;
 
 import dropper.entities.Ball;
 import dropper.entities.DropperArea;
+import dropper.entities.Platform;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -48,6 +49,10 @@ public class Driver extends Application {
 	void render(GraphicsContext gc) {
 		gc.setFill(Color.WHITE);
 		gc.fillRect(0, 0, WindowSettings.WIDTH, WindowSettings.HEIGHT);
+		
+		new Platform(225, 375, 50, 50, 60).render(gc);
+        new Platform(225, 375, 50, 50, 30).render(gc);
+        new Platform(225, 375, 50, 50, 0).render(gc);
 		
 		dropArea.render(gc);
 	}

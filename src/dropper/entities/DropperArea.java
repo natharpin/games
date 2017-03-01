@@ -15,7 +15,7 @@ public class DropperArea extends Sprite {
 	}
 	
 	public void click(){
-		if(inFreeFall == null) inFreeFall = new Ball(this.x, this.y);
+		if(inFreeFall == null) inFreeFall = new Ball(followBallX(), followBallY());
 	}
 	
 	public void mouseMove(double x, double y){
@@ -34,12 +34,12 @@ public class DropperArea extends Sprite {
 	}
 	
 	private double followBallY(){
-		if(this.y < this.sizeX / 2) return 0;
+		if(this.y < 0) return 0;
 		return min(this.y, WindowSettings.HEIGHT / 8 - this.sizeX);
 	}
 	
 	private double followBallX(){
-		if(this.x - (this.sizeX / 2) < 0) return 0;
+		if(this.x < 0) return 0;
 		if(this.x > WindowSettings.WIDTH - this.sizeX) return WindowSettings.WIDTH - this.sizeX;
 		return this.x;
 	}
