@@ -30,14 +30,16 @@ public class Platform extends Sprite {
 	}
 
 	private void setVertices(){
-        vertices[0] = new Point(x, y);
-        double x1 = Math.cos(theta) * sizeX;
-        double y1 = Math.sin(theta) * sizeX;
-        vertices[1] = new Point(x + x1, y + y1);
-        double x2 = Math.cos(90 - theta) * sizeY;
-        double y2 = Math.sin(90 - theta) * sizeY;
-        vertices[2] = new Point(x + x1 + x2, y + y1 + y2);
-        vertices[3] = new Point(x + x2, y + y2);
+	    double x1, x2, y1, y2;
+        x1 = sizeX / 2 * Math.cos(Math.toRadians(theta));
+        y1 = sizeX / 2 * Math.sin(Math.toRadians(theta));
+        x2 = sizeY / 2 * Math.cos(Math.toRadians(90 - theta));
+        y2 = sizeY / 2 * Math.sin(Math.toRadians(90 - theta));
+	    
+        vertices[0] = new Point(x + x1 + x2, y + y1 + y2);
+        vertices[1] = new Point(x + x1 - 2 * x2, y + y1 - 2 * y2);
+        vertices[2] = new Point(x  - 2 * x1 - 2 * x2, y - 2 * y1 - 2 * y2);
+        vertices[3] = new Point(x - 2 * x1 + x2, y - 2 * y1 + y2);
         
         for(Point p : vertices){
             System.out.println("(" + p.getX() + ", " + p.getY() + ")");
@@ -45,21 +47,26 @@ public class Platform extends Sprite {
         System.out.println();
 	}
 	
+	private double[] xCoordinates(){
+	    double result[] = new double[vertices.length];
+	    for(int i = 0; i < vertices.length; i++)
+	        result[i] = vertices[i].getX();
+	    return result;
+	}
+	
+   private double[] yCoordinates(){
+        double result[] = new double[vertices.length];
+        for(int i = 0; i < vertices.length; i++)
+            result[i] = vertices[i].getY();
+        return result;
+    }
+	
 	public void update() {
 		//Stationary platform
 	}
 
-	public void render(GraphicsContext gc) {		
-		gc.save();
-		gc.setFill(Color.BLUE);
-        Affine move = new Affine();
-
-        move.appendTranslation(x, y);
-        move.appendRotation(theta);
-        move.appendTranslation(-sizeX / 2, -sizeY / 2);
-
-        gc.setTransform(move);
-        gc.fillRect(0, 0, sizeX, sizeY);
-        gc.restore();
+	public void render(GraphicsContext gc) {	
+	    gc.setFill(Color.BLUE);
+		gc.fillPolygon(xCoordinates(), yCoordinates(), vertices.length);
 	}
 }

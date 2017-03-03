@@ -50,9 +50,9 @@ public class Driver extends Application {
 		gc.setFill(Color.WHITE);
 		gc.fillRect(0, 0, WindowSettings.WIDTH, WindowSettings.HEIGHT);
 		
-		new Platform(225, 375, 50, 50, 60).render(gc);
+		//new Platform(225, 375, 50, 50, 60).render(gc);
         new Platform(225, 375, 50, 50, 30).render(gc);
-        new Platform(225, 375, 50, 50, 0).render(gc);
+        //new Platform(225, 375, 50, 50, 0).render(gc);
 		
 		dropArea.render(gc);
 	}
