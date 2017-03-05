@@ -10,7 +10,7 @@ public class Ball extends Sprite{
         this.y = y;
         this.dx = 0;
         this.dy = 0;
-        this.sizeX = 10;
+        this.width = 10;
     }
 	
     public Ball(double x, double y, double dx, double dy){
@@ -18,7 +18,7 @@ public class Ball extends Sprite{
         this.y = y;
         this.dx = dx;
         this.dy = dy;
-        this.sizeX = 10;
+        this.width = 10;
     }
     
     public Ball(double x, double y, double dx, double dy, double size){
@@ -26,18 +26,22 @@ public class Ball extends Sprite{
         this.y = y;
         this.dx = dx;
         this.dy = dy;
-        this.sizeX = size;
+        this.width = size;
+    }
+    
+    public Ball next(){
+    	return new Ball(x + dx, y + dy, dx, dy, width);
     }
     
     public void update(){
     	x+= dx;
     	y+=dy;
-    	dy+=1;
+    	dy+=.2;
     }
     
     public void render(GraphicsContext gc){
     	gc.setFill(Color.RED);
-    	gc.fillOval(this.x, this.y, this.sizeX, this.sizeX);
+    	gc.fillOval(this.x, this.y, this.width, this.width);
     }
     
 }

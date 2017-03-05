@@ -1,26 +1,29 @@
 package dropper.entities;
 
+import dropper.datastructures.Point;
 import dropper.window.WindowSettings;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class DropperArea extends Sprite {
 	
-	private Ball inBox, inFreeFall;
+	private Ball inBox, inFreefall;
+	private int bounceCooldown;
 	
 	public DropperArea(){
 		this.x = 0;
 		this.y = 0;
-		this.sizeX = 10;
+		this.width = 10;
+		this.bounceCooldown = 0;
 	}
 	
 	public void click(){
-		if(inFreeFall == null) inFreeFall = new Ball(followBallX(), followBallY());
+		if(inFreefall == null) inFreefall = new Ball(followBallX(), followBallY());
 	}
 	
 	public void mouseMove(double x, double y){
-		this.x = x - this.sizeX / 2;
-		this.y = y - this.sizeX / 2;
+		this.x = x - this.width / 2;
+		this.y = y - this.width / 2;
 	}
 	
 	private double min(double a, double b){
@@ -35,19 +38,33 @@ public class DropperArea extends Sprite {
 	
 	private double followBallY(){
 		if(this.y < 0) return 0;
-		return min(this.y, WindowSettings.HEIGHT / 8 - this.sizeX);
+		return min(this.y, WindowSettings.HEIGHT / 8 - this.width);
 	}
 	
 	private double followBallX(){
 		if(this.x < 0) return 0;
-		if(this.x > WindowSettings.WIDTH - this.sizeX) return WindowSettings.WIDTH - this.sizeX;
+		if(this.x > WindowSettings.WIDTH - this.width) return WindowSettings.WIDTH - this.width;
 		return this.x;
 	}
 	
+	public void checkCollisions(Platform[] platforms){
+		if(inFreefall == null) return;
+		for(Platform p : platforms){
+			if(p.intersects(inFreefall.next()) && bounceCooldown < 0){
+				bounceCooldown = 2;
+				p.bounce(inFreefall);
+				
+				//x += 2.0*(r-d)*nx; y += 2.0*(r-d)*ny;
+			}
+		}
+	}
+	
 	public void update(){
-		if(inFreeFall != null) {
-			inFreeFall.update();
-			if(inFreeFall.y > WindowSettings.HEIGHT) inFreeFall = null;
+		bounceCooldown--;
+		if(inFreefall != null) {
+			inFreefall.update();
+			if(inFreefall.y > WindowSettings.HEIGHT) inFreefall = null;
+			if(inFreefall != null && (inFreefall.x < 0 || inFreefall.x > WindowSettings.WIDTH)) inFreefall = null;
 		}
 		inBox = new Ball(followBallX(), followBallY());
 	}
@@ -56,6 +73,6 @@ public class DropperArea extends Sprite {
 		gc.setStroke(Color.BLACK);
 		gc.strokeRect(0, 0, WindowSettings.WIDTH, WindowSettings.HEIGHT / 8);
 		if(inBox != null) inBox.render(gc);
-		if(inFreeFall != null) inFreeFall.render(gc);
+		if(inFreefall != null) inFreefall.render(gc);
 	}
 }

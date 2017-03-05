@@ -22,13 +22,13 @@ public class Driver extends Application {
 
 	GraphicsContext gc;
 	DropperArea dropArea;
-	
+
 	void initialize() {
 		dropArea = new DropperArea();
 	}
 
 	void setHandlers(Scene scene) {
-		scene.setOnMousePressed( e -> {
+		scene.setOnMousePressed(e -> {
 			dropArea.click();
 		});
 		scene.setOnMouseMoved(e -> {
@@ -36,11 +36,14 @@ public class Driver extends Application {
 		});
 	}
 
+	Platform levelOne[] = { new Platform(225, 375, 50, 50, 30), new Platform(0, 100, 10, 500, 0), new Platform(300, 200, 100, 25, 0) };
+
 	/**
 	 * Update variables for one time step
 	 */
 	public void update() {
 		dropArea.update();
+		dropArea.checkCollisions(levelOne);
 	}
 
 	/**
@@ -50,10 +53,10 @@ public class Driver extends Application {
 		gc.setFill(Color.WHITE);
 		gc.fillRect(0, 0, WindowSettings.WIDTH, WindowSettings.HEIGHT);
 		
-		//new Platform(225, 375, 50, 50, 60).render(gc);
-        new Platform(225, 375, 50, 50, 30).render(gc);
-        //new Platform(225, 375, 50, 50, 0).render(gc);
-		
+		for(Platform p : levelOne){
+			p.render(gc);
+		}
+
 		dropArea.render(gc);
 	}
 
