@@ -36,7 +36,7 @@ public class Driver extends Application {
 		});
 	}
 
-	Platform levelOne[] = { new Platform(225, 375, 50, 50, 30), new Platform(0, 100, 10, 500, 0), new Platform(300, 200, 100, 25, 0) };
+	Platform levelOne[] = { new Platform(225, 375, 50, 50, -30), new Platform(225, 375, 50, 50, -120), new Platform(0, 100, 10, 500, 0), new Platform(300, 500, 100, 25, 0) };
 
 	/**
 	 * Update variables for one time step

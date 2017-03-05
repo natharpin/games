@@ -30,13 +30,15 @@ public class Vector {
 	}
 	
 	public Vector normal(){
-		double magnitude = Math.sqrt(endX * endX + endY * endY);
-		return new Vector(endX / magnitude, endY / magnitude);
+		return new Vector(endX / magnitude(), endY / magnitude());
 	}
 	
 	public double dist(double x, double y){
-		double magnitude = Math.sqrt(endX * endX + endY * endY);
-		return x * endX + y * endY - magnitude;
+		return (x * endX) + (y * endY) - magnitude();
+	}
+	
+	public double magnitude(){
+		return Math.sqrt(endX * endX + endY * endY);
 	}
 	
 	public String toString(){

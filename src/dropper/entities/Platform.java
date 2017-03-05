@@ -120,12 +120,20 @@ public class Platform extends Sprite {
 			double dot = normal.dotProduct(incoming);
 			Vector dotXnormal = normal.mult(dot);
 			Vector dotXnormalX2 = dotXnormal.mult(2);
-			Vector resultVec = incoming.add(dotXnormalX2);
+			Vector resultVec = incoming.add(dotXnormalX2.mult((i % 3 == 0) ? 1 : -1));
+			
+			System.out.println(normal.toString());
+			System.out.println(incoming.toString());
+			System.out.println(dot);
+			System.out.println(dotXnormal.toString());
+			System.out.println(dotXnormalX2.toString());
+			System.out.println(resultVec.toString());
+			
 			result = resultVec.end();
 		}
 		System.out.println(result.toString());
-		ball.dx += result.getX();
-		ball.dy -= result.getY();
+		ball.dx += (i % 3) == 0 ? result.getX() : -result.getX();
+		ball.dy -= (i % 3) == 0 ? result.getY() : -result.getY();
 		// ball.x += 2 * (ball.width / 2 - normal.dist(ball.x, ball.y)) *
 		// normal.end().getX();
 		// ball.y += 2 * (ball.width / 2 - normal.dist(ball.x, ball.y)) *

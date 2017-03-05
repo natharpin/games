@@ -42,6 +42,11 @@ public class Ball extends Sprite{
     public void render(GraphicsContext gc){
     	gc.setFill(Color.RED);
     	gc.fillOval(this.x, this.y, this.width, this.width);
+    	
+    	gc.strokeLine(x, y + width / 2, x + dx, y + width / 2 + dy);
+    	gc.strokeLine(x + width, y + width / 2, x + width + dx, y + width / 2 + dy);
+    	gc.strokeLine(x + width / 2, y, x + width / 2 + dx, y + dy);
+    	gc.strokeLine(x + width / 2, y + width, x + width / 2 + dx, y + width + dy);
     }
     
 }
