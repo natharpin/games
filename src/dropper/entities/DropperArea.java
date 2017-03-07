@@ -1,10 +1,16 @@
 package dropper.entities;
 
+import dropper.datastructures.Level;
 import dropper.datastructures.Point;
 import dropper.window.WindowSettings;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+/**
+ * Controls the area above the level that drops the ball and all the ball collisions
+ * @author Nathan and Andrew
+ *
+ */
 public class DropperArea extends Sprite {
 	
 	private Ball inBox, inFreefall;
@@ -47,16 +53,23 @@ public class DropperArea extends Sprite {
 		return this.x;
 	}
 	
-	public void checkCollisions(Platform[] platforms){
-		if(inFreefall == null) return;
-		for(Platform p : platforms){
+	public int checkCollisions(Level level){
+		int score = 0;
+		if(inFreefall == null) return score;
+		for(Platform p : level.platforms){
 			if(p.intersects(inFreefall.next()) && bounceCooldown < 0){
 				bounceCooldown = 2;
 				p.bounce(inFreefall);
-				
-				//x += 2.0*(r-d)*nx; y += 2.0*(r-d)*ny;
 			}
 		}
+		for(Bucket b : level.buckets){
+			if(inFreefall == null) return score;
+			if(b.intersects(inFreefall.next())){
+				inFreefall = null;
+				score+= b.score;
+			}
+		}
+		return score;
 	}
 	
 	public void update(){

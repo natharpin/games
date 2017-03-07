@@ -3,7 +3,9 @@ package dropper.window;
 import java.util.ArrayList;
 import java.util.Random;
 
+import dropper.datastructures.Level;
 import dropper.entities.Ball;
+import dropper.entities.Bucket;
 import dropper.entities.DropperArea;
 import dropper.entities.Platform;
 import javafx.animation.Animation;
@@ -17,11 +19,17 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
+/**
+ * A simple pachinko game, drop the ball into the buckets while trying to collect coins
+ * @author Nathan Arpin and Andrew Webber
+ *
+ */
 public class Driver extends Application {
 
 	GraphicsContext gc;
 	DropperArea dropArea;
+
+	int score = 0;
 
 	void initialize() {
 		dropArea = new DropperArea();
@@ -36,14 +44,20 @@ public class Driver extends Application {
 		});
 	}
 
-	Platform levelOne[] = { new Platform(225, 375, 50, 50, -30), new Platform(225, 375, 50, 50, -120), new Platform(0, 100, 10, 500, 0), new Platform(300, 500, 100, 25, 0) };
+	Level levels[] = { new Level(
+			new Platform[] { new Platform(225, 375, 50, 50, -30), new Platform(225, 375, 50, 50, -120),
+					new Platform(0, 100, 10, 500, 0), new Platform(300, 500, 100, 25, 0) },
+			new Bucket[] { new Bucket(0, WindowSettings.HEIGHT - 30, WindowSettings.WIDTH / 3, 30, 50),
+					new Bucket(WindowSettings.WIDTH / 3, WindowSettings.HEIGHT - 30, WindowSettings.WIDTH / 3, 30, 100),
+					new Bucket((WindowSettings.WIDTH / 3) * 2, WindowSettings.HEIGHT - 30, WindowSettings.WIDTH / 3, 30,
+							50) }) };
 
 	/**
 	 * Update variables for one time step
 	 */
 	public void update() {
 		dropArea.update();
-		dropArea.checkCollisions(levelOne);
+		score += dropArea.checkCollisions(levels[0]);
 	}
 
 	/**
@@ -52,12 +66,19 @@ public class Driver extends Application {
 	void render(GraphicsContext gc) {
 		gc.setFill(Color.WHITE);
 		gc.fillRect(0, 0, WindowSettings.WIDTH, WindowSettings.HEIGHT);
-		
-		for(Platform p : levelOne){
+
+		for (Platform p : levels[0].platforms) {
 			p.render(gc);
 		}
 
+		for (Bucket b : levels[0].buckets) {
+			b.render(gc);
+		}
+
 		dropArea.render(gc);
+		
+		gc.setStroke(Color.BLACK);
+		gc.strokeText("" + score, 10, 15);
 	}
 
 	/*

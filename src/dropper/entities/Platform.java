@@ -9,6 +9,11 @@ import javafx.geometry.BoundingBox;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+/**
+ * Simple platform to bounce the ball off of, can be angled and has the groundwork setup for spinning platforms
+ * @author Nathan and Andrew
+ *
+ */
 public class Platform extends Sprite {
 
     private double theta;
