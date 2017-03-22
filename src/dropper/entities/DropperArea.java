@@ -69,6 +69,13 @@ public class DropperArea extends Sprite {
 				score+= b.score;
 			}
 		}
+		for(int i = 0; i < level.coins.size(); i++){
+			if(inFreefall == null) return score;
+			if(level.coins.get(i).intersects(inFreefall.next())){
+				score+= 25;
+				level.coins.remove(i);
+			}
+		}
 		return score;
 	}
 	

@@ -91,12 +91,15 @@ public class Platform extends Sprite {
     }
 
     public void bounce(Ball ball) {
-        boolean intersects = false;
         int i = 4;
-        Ball next = ball.next();
-
-        double cx = x + width / 2;
-        double cy = y + height / 2;
+        
+        double cxx = (width / 2) * Math.cos(Math.toRadians(theta));
+        double cxy = (width / 2) * Math.sin(Math.toRadians(theta));
+        double cyx = (height / 2) * Math.cos(Math.toRadians(90 - theta));
+        double cyy = (height / 2) * Math.sin(Math.toRadians(90 - theta));
+        
+        double cx = x + cxx + cyx;
+        double cy = y + cxy + cyy;
 
         double cbx = ball.x + ball.width / 2;
         double cby = ball.y + ball.width / 2;
@@ -149,35 +152,14 @@ public class Platform extends Sprite {
                 i = 0;
             }
         }
-        /*
-         * for (i = 0; i < vertices.length; i++) { if
-         * (Line2D.linesIntersect(vertices[i].getX(), vertices[i].getY(),
-         * vertices[(i + 1) % 4].getX(), vertices[(i + 1) % 4].getY(), next.x,
-         * next.y + next.width / 2, ball.x, ball.y + ball.width / 2)) {
-         * intersects = true; break; } if
-         * (Line2D.linesIntersect(vertices[i].getX(), vertices[i].getY(),
-         * vertices[(i + 1) % 4].getX(), vertices[(i + 1) % 4].getY(), next.x +
-         * next.width, next.y + next.width / 2, ball.x + ball.width, ball.y +
-         * ball.width / 2)) { intersects = true; break; } if
-         * (Line2D.linesIntersect(vertices[i].getX(), vertices[i].getY(),
-         * vertices[(i + 1) % 4].getX(), vertices[(i + 1) % 4].getY(), next.x +
-         * next.width / 2, next.y, ball.x + ball.width / 2, ball.y)) {
-         * intersects = true; break; } if
-         * (Line2D.linesIntersect(vertices[i].getX(), vertices[i].getY(),
-         * vertices[(i + 1) % 4].getX(), vertices[(i + 1) % 4].getY(), next.x +
-         * next.width / 2, next.y + next.width, ball.x + ball.width / 2, ball.y
-         * + ball.width)) { intersects = true; break; }
-         * 
-         * }
-         */
         Vector normal;
         Vector incoming = new Vector(ball.dx, ball.dy);
-        normal = new Vector(vertices[(i + 1) % 4].getX() - vertices[i].getX(),
-                vertices[(i + 1) % 4].getY() - vertices[i].getY()).normal();
+        normal = new Vector(vertices[(i + 1) % 4].getY() - vertices[i].getY(),
+                -(vertices[(i + 1) % 4].getX() - vertices[i].getX())).normal();
         double dot = normal.dotProduct(incoming);
         Vector dotXnormal = normal.mult(dot);
         Vector dotXnormalX2 = dotXnormal.mult(2);
-        Vector resultVec = incoming.add(dotXnormalX2.mult((i % 3 == 0) ? 1 : -1));
+        Vector resultVec = incoming.add(dotXnormalX2);
 
         System.out.println(normal.toString());
         System.out.println(incoming.toString());
@@ -189,13 +171,8 @@ public class Platform extends Sprite {
         Point result = resultVec.end();
 
         System.out.println(result.toString());
-        ball.dx += (i % 3) == 0 ? result.getX() : -result.getX();
-        ball.dy -= (i % 3) == 0 ? result.getY() : -result.getY();
-        // ball.x += 2 * (ball.width / 2 - normal.dist(ball.x, ball.y)) *
-        // normal.end().getX();
-        // ball.y += 2 * (ball.width / 2 - normal.dist(ball.x, ball.y)) *
-        // normal.end().getY();
-        // x += 2.0*(r-d)*nx; y += 2.0*(r-d)*ny;
+        ball.dx += result.getX();
+        ball.dy -= result.getY();
     }
 
     public void update() {

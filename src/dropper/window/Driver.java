@@ -6,6 +6,7 @@ import java.util.Random;
 import dropper.datastructures.Level;
 import dropper.entities.Ball;
 import dropper.entities.Bucket;
+import dropper.entities.Coin;
 import dropper.entities.DropperArea;
 import dropper.entities.Platform;
 import javafx.animation.Animation;
@@ -19,8 +20,11 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
 /**
- * A simple pachinko game, drop the ball into the buckets while trying to collect coins
+ * A simple pachinko game, drop the ball into the buckets while trying to
+ * collect coins
+ * 
  * @author Nathan Arpin and Andrew Webber
  *
  */
@@ -33,6 +37,7 @@ public class Driver extends Application {
 
 	void initialize() {
 		dropArea = new DropperArea();
+		initLevels();
 	}
 
 	void setHandlers(Scene scene) {
@@ -44,13 +49,29 @@ public class Driver extends Application {
 		});
 	}
 
-	Level levels[] = { new Level(
-			new Platform[] { new Platform(225, 375, 50, 50, -30), new Platform(225, 375, 50, 50, -120),
-					new Platform(0, 100, 10, 500, 0), new Platform(300, 500, 100, 25, 0) },
+	ArrayList<Coin> coins = new ArrayList<Coin>();
+
+	Level levels[] = new Level[1];
+	
+	void initLevels(){
+		coins.add(new Coin(150, 150, 10));
+		coins.add(new Coin(150, 200, 10));
+		coins.add(new Coin(150, 300, 10));
+		coins.add(new Coin(150, 400, 10));
+		coins.add(new Coin(200, 200, 10));
+		coins.add(new Coin(300, 300, 10));
+		coins.add(new Coin(400, 400, 10));
+		levels[0] = new Level(
+			new Platform[] { 
+					new Platform(225, 375, 50, 50, -30), new Platform(225, 375, 50, 50, -120),
+					new Platform(0, 100, 10, WindowSettings.HEIGHT - 100, 0), new Platform(300, 500, 100, 25, 0),
+					new Platform(WindowSettings.WIDTH - 10, 100, 10, WindowSettings.HEIGHT - 100, 0) },
 			new Bucket[] { new Bucket(0, WindowSettings.HEIGHT - 30, WindowSettings.WIDTH / 3, 30, 50),
 					new Bucket(WindowSettings.WIDTH / 3, WindowSettings.HEIGHT - 30, WindowSettings.WIDTH / 3, 30, 100),
 					new Bucket((WindowSettings.WIDTH / 3) * 2, WindowSettings.HEIGHT - 30, WindowSettings.WIDTH / 3, 30,
-							50) }) };
+							50) },
+			coins);
+	}
 
 	/**
 	 * Update variables for one time step
@@ -75,8 +96,12 @@ public class Driver extends Application {
 			b.render(gc);
 		}
 
+		for (Coin c : levels[0].coins) {
+			c.render(gc);
+		}
+
 		dropArea.render(gc);
-		
+
 		gc.setStroke(Color.BLACK);
 		gc.strokeText("" + score, 10, 15);
 	}
