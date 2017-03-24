@@ -36,7 +36,7 @@ public class Platform extends Sprite {
         this.width = width;
         this.height = height;
 
-        this.theta = theta % 360;
+        this.theta = theta >= 0 ? theta % 360 : 360 + (theta % 360);
         setVertices();
     }
 
@@ -93,16 +93,39 @@ public class Platform extends Sprite {
     public void bounce(Ball ball) {
         int i = 4;
         
-        double cxx = (width / 2) * Math.cos(Math.toRadians(theta));
-        double cxy = (width / 2) * Math.sin(Math.toRadians(theta));
-        double cyx = (height / 2) * Math.cos(Math.toRadians(90 - theta));
-        double cyy = (height / 2) * Math.sin(Math.toRadians(90 - theta));
+        double angle = theta % 90;
         
-        double cx = x + cxx + cyx;
-        double cy = y + cxy + cyy;
+        double cxx = ( Math.abs(width) / 2) * Math.cos(Math.toRadians(angle));
+        double cxy = ( Math.abs(width) / 2) * Math.sin(Math.toRadians(angle));
+        double cyx = ( Math.abs(height) / 2) * Math.cos(Math.toRadians(90 - angle));
+        double cyy = ( Math.abs(height) / 2) * Math.sin(Math.toRadians(90 - angle));
+        
+        int quadrant = (int) (theta / 90);
+        
+        double cx = x;
+        double cy = y;
+        
+        switch(quadrant){
+            case 0:
+                cx+= cxx + cyx;
+                cy+= cxy + cyy;
+                break;
+            case 1:
+                cx-= cxx + cyx;
+                cy+= cxy + cyy;
+                break;
+            case 2:
+                cx-= cxx + cyx;
+                cy-= cxy + cyy;
+                break;
+            case 3:
+                cx+= cxx + cyx;
+                cy-= cxy + cyy;
+                break;
+        }
 
-        double cbx = ball.x + ball.width / 2;
-        double cby = ball.y + ball.width / 2;
+        double cbx = (ball.x + ball.width / 2) - ball.dx;
+        double cby = (ball.y + ball.width / 2) - ball.dy;
 
         double angleToBall = (Math.toDegrees(Math.atan((cby - cy) / (cbx - cx))) - theta) % 360;
 
@@ -158,7 +181,7 @@ public class Platform extends Sprite {
                 -(vertices[(i + 1) % 4].getX() - vertices[i].getX())).normal();
         double dot = normal.dotProduct(incoming);
         Vector dotXnormal = normal.mult(dot);
-        Vector dotXnormalX2 = dotXnormal.mult(2);
+        Vector dotXnormalX2 = dotXnormal.mult(1);
         Vector resultVec = incoming.add(dotXnormalX2);
 
         System.out.println(normal.toString());
@@ -171,7 +194,7 @@ public class Platform extends Sprite {
         Point result = resultVec.end();
 
         System.out.println(result.toString());
-        ball.dx += result.getX();
+        ball.dx -= result.getX();
         ball.dy -= result.getY();
     }
 
@@ -182,5 +205,38 @@ public class Platform extends Sprite {
     public void render(GraphicsContext gc) {
         gc.setFill(Color.BLUE);
         gc.fillPolygon(xCoordinates(), yCoordinates(), vertices.length);
+
+        double angle = theta % 90;
+        
+        double cxx = (width / 2) * Math.cos(Math.toRadians(angle));
+        double cxy = (width / 2) * Math.sin(Math.toRadians(angle));
+        double cyx = (height / 2) * Math.cos(Math.toRadians(90 - angle));
+        double cyy = (height / 2) * Math.sin(Math.toRadians(90 - angle));
+        int quadrant = (int) (theta / 90);
+        
+        double cx = x;
+        double cy = y;
+        
+        switch(quadrant){
+            case 0:
+                cx+= cxx + cyx;
+                cy+= cxy + cyy;
+                break;
+            case 1:
+                cx+= cyx - cxx;
+                cy-= cxy + cyy;
+                break;
+            case 2:
+                cx+= (-cxx - cyx);
+                cy+= (cxy - cyy);
+                break;
+            case 3:
+                cx-= cxx - cyx;
+                cy-= (-cxy - cyy);
+                break;
+        }
+        
+        gc.strokeLine(x, y, cx, cy);
+        
     }
 }

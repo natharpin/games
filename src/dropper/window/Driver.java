@@ -63,7 +63,7 @@ public class Driver extends Application {
 		coins.add(new Coin(400, 400, 10));
 		levels[0] = new Level(
 			new Platform[] { 
-					new Platform(225, 375, 50, 50, -30), new Platform(225, 375, 50, 50, -120),
+					new Platform(225, 375, 50, 50, 120), new Platform(225, 375, 50, 50, -120),
 					new Platform(0, 100, 10, WindowSettings.HEIGHT - 100, 0), new Platform(300, 500, 100, 25, 0),
 					new Platform(WindowSettings.WIDTH - 10, 100, 10, WindowSettings.HEIGHT - 100, 0) },
 			new Bucket[] { new Bucket(0, WindowSettings.HEIGHT - 30, WindowSettings.WIDTH / 3, 30, 50),
