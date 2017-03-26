@@ -1,6 +1,9 @@
 package dropper.datastructures;
 
+import java.util.ArrayList;
+
 import dropper.entities.Bucket;
+import dropper.entities.Coin;
 import dropper.entities.Platform;
 
 /**
@@ -10,13 +13,14 @@ import dropper.entities.Platform;
  */
 public class Level {
 	
-	public Level(Platform platforms[], Bucket buckets[]){
+	public Level(Platform platforms[], Bucket buckets[], ArrayList<Coin> coins){
 		this.platforms = platforms;
 		this.buckets = buckets;
+		this.coins = coins;
 	}
 
 	public Platform platforms[];
 	public Bucket buckets[];
-	//Coin coins[];
+	public ArrayList<Coin> coins;
 	
 }
