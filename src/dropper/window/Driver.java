@@ -9,6 +9,7 @@ import dropper.entities.Bucket;
 import dropper.entities.Coin;
 import dropper.entities.DropperArea;
 import dropper.entities.Platform;
+import dropper.entities.SpinningPlatform;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -79,15 +80,21 @@ public class Driver extends Application {
 	public void update() {
 		dropArea.update();
 		score += dropArea.checkCollisions(levels[0]);
+		spin.update();
 	}
 
 	/**
 	 * Draw the game world
 	 */
+	
+	SpinningPlatform spin = new SpinningPlatform(WindowSettings.WIDTH / 2, 300, 50, 10);
+	
 	void render(GraphicsContext gc) {
 		gc.setFill(Color.WHITE);
 		gc.fillRect(0, 0, WindowSettings.WIDTH, WindowSettings.HEIGHT);
 
+		spin.render(gc);
+		
 		for (Platform p : levels[0].platforms) {
 			p.render(gc);
 		}

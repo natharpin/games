@@ -16,9 +16,9 @@ import javafx.scene.paint.Color;
  */
 public class Platform extends Sprite {
 
-    private double theta;
+    protected double theta;
 
-    private Point vertices[];
+    protected Point vertices[];
 
     public Platform(double x, double y, double width, double height) {
         this.x = x;
@@ -40,7 +40,7 @@ public class Platform extends Sprite {
         setVertices();
     }
 
-    private void setVertices() {
+    protected void setVertices() {
         vertices = new Point[4];
         double x1, x2, y1, y2;
         x1 = width * Math.cos(Math.toRadians(theta));
@@ -94,13 +94,12 @@ public class Platform extends Sprite {
         int i = 4;
         
         double angle = theta % 90;
-        
-        double cxx = ( Math.abs(width) / 2) * Math.cos(Math.toRadians(angle));
-        double cxy = ( Math.abs(width) / 2) * Math.sin(Math.toRadians(angle));
-        double cyx = ( Math.abs(height) / 2) * Math.cos(Math.toRadians(90 - angle));
-        double cyy = ( Math.abs(height) / 2) * Math.sin(Math.toRadians(90 - angle));
-        
         int quadrant = (int) (theta / 90);
+        
+        double cxx = quadrant != 1 ? (width / 2) * Math.cos(Math.toRadians(angle)) : (width / 2) * Math.cos(Math.toRadians(90 - angle));
+        double cxy = quadrant != 1 ? (width / 2) * Math.sin(Math.toRadians(angle)) : (width / 2) * Math.sin(Math.toRadians(90 - angle));
+        double cyx = quadrant != 1 ? (height / 2) * Math.cos(Math.toRadians(90 - angle)) : (height / 2) * Math.cos(Math.toRadians(angle));
+        double cyy = quadrant != 1 ? (height / 2) * Math.sin(Math.toRadians(90 - angle)) : (height / 2) * Math.sin(Math.toRadians(angle));
         
         double cx = x;
         double cy = y;
@@ -111,16 +110,16 @@ public class Platform extends Sprite {
                 cy+= cxy + cyy;
                 break;
             case 1:
-                cx-= cxx + cyx;
-                cy+= cxy + cyy;
+                cx+= cyx - cxx;
+                cy-= cxy + cyy;
                 break;
             case 2:
-                cx-= cxx + cyx;
-                cy-= cxy + cyy;
+                cx+= (-cxx - cyx);
+                cy+= (cxy - cyy);
                 break;
             case 3:
-                cx+= cxx + cyx;
-                cy-= cxy + cyy;
+                cx-= cxx - cyx;
+                cy-= (-cxy - cyy);
                 break;
         }
 
@@ -194,7 +193,7 @@ public class Platform extends Sprite {
         Point result = resultVec.end();
 
         System.out.println(result.toString());
-        ball.dx -= result.getX();
+        ball.dx += result.getX();
         ball.dy -= result.getY();
     }
 
@@ -207,12 +206,12 @@ public class Platform extends Sprite {
         gc.fillPolygon(xCoordinates(), yCoordinates(), vertices.length);
 
         double angle = theta % 90;
-        
-        double cxx = (width / 2) * Math.cos(Math.toRadians(angle));
-        double cxy = (width / 2) * Math.sin(Math.toRadians(angle));
-        double cyx = (height / 2) * Math.cos(Math.toRadians(90 - angle));
-        double cyy = (height / 2) * Math.sin(Math.toRadians(90 - angle));
         int quadrant = (int) (theta / 90);
+        
+        double cxx = quadrant != 1 ? (width / 2) * Math.cos(Math.toRadians(angle)) : (width / 2) * Math.cos(Math.toRadians(90 - angle));
+        double cxy = quadrant != 1 ? (width / 2) * Math.sin(Math.toRadians(angle)) : (width / 2) * Math.sin(Math.toRadians(90 - angle));
+        double cyx = quadrant != 1 ? (height / 2) * Math.cos(Math.toRadians(90 - angle)) : (height / 2) * Math.cos(Math.toRadians(angle));
+        double cyy = quadrant != 1 ? (height / 2) * Math.sin(Math.toRadians(90 - angle)) : (height / 2) * Math.sin(Math.toRadians(angle));
         
         double cx = x;
         double cy = y;
@@ -220,7 +219,7 @@ public class Platform extends Sprite {
         switch(quadrant){
             case 0:
                 cx+= cxx + cyx;
-                cy+= cxy + cyy;
+                cy+= -cxy + cyy;
                 break;
             case 1:
                 cx+= cyx - cxx;
@@ -231,8 +230,8 @@ public class Platform extends Sprite {
                 cy+= (cxy - cyy);
                 break;
             case 3:
-                cx-= cxx - cyx;
-                cy-= (-cxy - cyy);
+                cx+= cxx - cyx;
+                cy+= cxy + cyy;
                 break;
         }
         
