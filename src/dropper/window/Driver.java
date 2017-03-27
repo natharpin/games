@@ -11,7 +11,9 @@ import dropper.entities.Coin;
 import dropper.entities.DropperArea;
 import dropper.entities.MovingPlatform;
 import dropper.entities.Platform;
+import dropper.entities.Powerup;
 import dropper.entities.SpinningPlatform;
+import dropper.entities.SplitPowerup;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -35,7 +37,9 @@ public class Driver extends Application {
 
     GraphicsContext gc;
     DropperArea dropArea;
-
+    
+    int currentLevel = 0;
+    int state = 1;
     int score = 0;
 
     void initialize() {
@@ -45,7 +49,10 @@ public class Driver extends Application {
 
     void setHandlers(Scene scene) {
         scene.setOnMousePressed(e -> {
-            dropArea.click();
+            if(state == 0)
+                dropArea.click();
+            if(state == 1)
+                state = 0;
         });
         scene.setOnMouseMoved(e -> {
             dropArea.mouseMove(e.getX(), e.getY());
@@ -53,6 +60,7 @@ public class Driver extends Application {
     }
 
     ArrayList<Coin> coins = new ArrayList<Coin>();
+    ArrayList<Powerup> powers = new ArrayList<Powerup>();
 
     Level levels[] = new Level[1];
 
@@ -64,6 +72,9 @@ public class Driver extends Application {
         coins.add(new Coin(200, 200, 10));
         coins.add(new Coin(300, 300, 10));
         coins.add(new Coin(400, 400, 10));
+        
+        powers.add(new SplitPowerup(300, 100));
+        
         levels[0] = new Level(new Platform[]
         {
                 new Platform(225, 375, 50, 50, 120), new Platform(225, 375, 50, 50, -120),
@@ -80,7 +91,7 @@ public class Driver extends Application {
                 new Bucket(0, WindowSettings.HEIGHT - 30, WindowSettings.WIDTH / 3, 30, 50),
                 new Bucket(WindowSettings.WIDTH / 3, WindowSettings.HEIGHT - 30, WindowSettings.WIDTH / 3, 30, 100),
                 new Bucket((WindowSettings.WIDTH / 3) * 2, WindowSettings.HEIGHT - 30, WindowSettings.WIDTH / 3, 30, 50)
-        }, coins);
+        }, coins, powers);
     }
 
     /**
@@ -88,16 +99,28 @@ public class Driver extends Application {
      */
     public void update() {
         
-        for (MovingPlatform p : levels[0].movers) {
-            p.update();
-        }
-
-        for (SpinningPlatform p : levels[0].spinners) {
-            p.update();
+        if(score > 1000){
+            score = 0;
+            currentLevel++;
+            state = 1;
         }
         
-        dropArea.update();
-        score += dropArea.checkCollisions(levels[0]);
+        if(dropArea.getLives() <= 0){
+            state = 3;
+        }
+        
+        if(state == 0){
+            for (MovingPlatform p : levels[currentLevel].movers) {
+                p.update();
+            }
+    
+            for (SpinningPlatform p : levels[currentLevel].spinners) {
+                p.update();
+            }
+            
+            dropArea.update();
+            score += dropArea.checkCollisions(levels[currentLevel]);
+        }
     }
 
     /**
@@ -105,27 +128,48 @@ public class Driver extends Application {
      */
 
     void render(GraphicsContext gc) {
+        
+        if(state == 1){
+            gc.setFill(Color.BLACK);
+            gc.setStroke(Color.WHITE);
+            gc.fillRect(0, 0, WindowSettings.WIDTH, WindowSettings.HEIGHT);
+            gc.strokeText("Click to start level", WindowSettings.WIDTH / 2 - 50, WindowSettings.HEIGHT / 2 - 10);
+            return;
+        }
+        
+        if(state == 3){
+            gc.setFill(Color.BLACK);
+            gc.setStroke(Color.WHITE);
+            gc.fillRect(0, 0, WindowSettings.WIDTH, WindowSettings.HEIGHT);
+            gc.strokeText("You lose!", WindowSettings.WIDTH / 2 - 50, WindowSettings.HEIGHT / 2 - 10);
+            return;
+        }
+        
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, WindowSettings.WIDTH, WindowSettings.HEIGHT);
 
-        for (Platform p : levels[0].platforms) {
+        for (Platform p : levels[currentLevel].platforms) {
             p.render(gc);
         }
 
-        for (MovingPlatform p : levels[0].movers) {
+        for (MovingPlatform p : levels[currentLevel].movers) {
             p.render(gc);
         }
 
-        for (SpinningPlatform p : levels[0].spinners) {
+        for (SpinningPlatform p : levels[currentLevel].spinners) {
             p.render(gc);
         }
 
-        for (Bucket b : levels[0].buckets) {
+        for (Bucket b : levels[currentLevel].buckets) {
             b.render(gc);
         }
 
-        for (Coin c : levels[0].coins) {
+        for (Coin c : levels[currentLevel].coins) {
             c.render(gc);
+        }
+        
+        for(Powerup p : levels[currentLevel].powerups){
+            p.render(gc);
         }
 
         dropArea.render(gc);

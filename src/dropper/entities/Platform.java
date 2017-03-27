@@ -179,7 +179,6 @@ public class Platform extends Sprite {
 
         Point result = resultVec.end();
 
-        System.out.println(result.toString());
         ball.dx += result.getX();
         ball.dy -= result.getY();
     }
