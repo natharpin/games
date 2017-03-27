@@ -98,6 +98,11 @@ public class Driver extends Application {
         
         dropArea.update();
         score += dropArea.checkCollisions(levels[0]);
+        
+        for (Coin c : levels[0].coins) {
+            c.update();
+        }
+        
     }
 
     /**

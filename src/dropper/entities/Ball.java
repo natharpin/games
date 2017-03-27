@@ -1,6 +1,7 @@
 package dropper.entities;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class Ball extends Sprite{
@@ -40,8 +41,10 @@ public class Ball extends Sprite{
     }
     
     public void render(GraphicsContext gc){
-    	gc.setFill(Color.RED);
-    	gc.fillOval(this.x, this.y, this.width, this.width);
+//    	gc.setFill(Color.RED);
+//    	gc.fillOval(this.x, this.y, this.width, this.width);
+    	Image ballImage = new Image("ball.png");
+    	gc.drawImage(ballImage, this.x, this.y);
     }
     
 }
