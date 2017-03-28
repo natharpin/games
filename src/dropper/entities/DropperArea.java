@@ -93,6 +93,10 @@ public class DropperArea extends Sprite {
                 if (b.intersects(inFreefall.get(i).next())) {
                     inFreefall.remove(i);
                     score += b.score;
+                    if(i!=0)
+                    	i--;
+                    if(inFreefall.isEmpty())
+                    	return score;
                     continue;
                 }
             }

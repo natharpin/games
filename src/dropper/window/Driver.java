@@ -65,31 +65,7 @@ public class Driver extends Application {
     Level levels[] = new Level[1];
 
     void initLevels() {
-        coins.add(new Coin(150, 150, 10));
-        coins.add(new Coin(150, 200, 10));
-        coins.add(new Coin(150, 300, 10));
-        coins.add(new Coin(150, 400, 10));
-        coins.add(new Coin(200, 200, 10));
-        coins.add(new Coin(300, 300, 10));
-        coins.add(new Coin(400, 400, 10));
-        
-        powers.add(new SplitPowerup(300, 100));
-        
-        levels[0] = new Level(new Platform[]
-        {
-                new Platform(225, 375, 50, 50, 120), new Platform(225, 375, 50, 50, -120), new Platform(300, 500, 100, 25, 0),
-        }, new MovingPlatform[]
-        {
-                new MovingPlatform(10, 101, 25, 10, -30, new Point(WindowSettings.WIDTH - 25 - 10, 0), new Point(1, 0))
-        }, new SpinningPlatform[]
-        {
-                new SpinningPlatform(WindowSettings.WIDTH / 2, 300, 50, 10)
-        }, new Bucket[]
-        {
-                new Bucket(0, WindowSettings.HEIGHT - 30, WindowSettings.WIDTH / 3, 30, 50),
-                new Bucket(WindowSettings.WIDTH / 3, WindowSettings.HEIGHT - 30, WindowSettings.WIDTH / 3, 30, 100),
-                new Bucket((WindowSettings.WIDTH / 3) * 2, WindowSettings.HEIGHT - 30, WindowSettings.WIDTH / 3, 30, 50)
-        }, coins, powers);
+        levels = Levels.getLevels();
     }
 
     /**
