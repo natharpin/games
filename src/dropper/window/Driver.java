@@ -77,9 +77,7 @@ public class Driver extends Application {
         
         levels[0] = new Level(new Platform[]
         {
-                new Platform(225, 375, 50, 50, 120), new Platform(225, 375, 50, 50, -120),
-                new Platform(0, 100, 10, WindowSettings.HEIGHT - 100, 1), new Platform(300, 500, 100, 25, 0),
-                new Platform(WindowSettings.WIDTH - 10, 100, 10, WindowSettings.HEIGHT - 100, -1)
+                new Platform(225, 375, 50, 50, 120), new Platform(225, 375, 50, 50, -120), new Platform(300, 500, 100, 25, 0),
         }, new MovingPlatform[]
         {
                 new MovingPlatform(10, 101, 25, 10, -30, new Point(WindowSettings.WIDTH - 25 - 10, 0), new Point(1, 0))
@@ -105,7 +103,7 @@ public class Driver extends Application {
             state = 1;
         }
         
-        if(dropArea.getLives() <= 0){
+        if(dropArea.getLives() <= 0 && dropArea.isDead()){
             state = 3;
         }
         

@@ -34,6 +34,10 @@ public class DropperArea extends Sprite {
         return lives;
     }
     
+    public boolean isDead(){
+        return inFreefall.isEmpty();
+    }
+    
     public void click() {
         if (inFreefall.isEmpty()) {
             inFreefall.add(new Ball(followBallX(), followBallY()));
@@ -97,6 +101,7 @@ public class DropperArea extends Sprite {
                 if (level.coins.get(j).intersects(inFreefall.get(i).next())) {
                     score += 25;
                     level.coins.remove(j);
+                    j--;
                 }
             }
             
@@ -105,10 +110,14 @@ public class DropperArea extends Sprite {
                     if(level.powerups.get(k) instanceof SplitPowerup){
                         split(i);
                         level.powerups.remove(k);
+                        k--;
+                        continue;
                     }
-                    if(level.powerups.get(k) instanceof AddLifePowerup){
+                    else if(level.powerups.get(k) instanceof AddLifePowerup){
                         lives++;
                         level.powerups.remove(k);
+                        k--;
+                        continue;
                     }
                 }
             }
@@ -132,7 +141,7 @@ public class DropperArea extends Sprite {
         for (int i = 0; i < inFreefall.size(); i++) {
             inFreefall.get(i).update();
             if (inFreefall.get(i).y > WindowSettings.HEIGHT) inFreefall.remove(i);
-            if (inFreefall.get(i).x < 0 || inFreefall.get(i).x > WindowSettings.WIDTH) inFreefall.remove(i);
+            if (inFreefall.get(i).x < 0 || inFreefall.get(i).x > WindowSettings.WIDTH) inFreefall.get(i).dx = -inFreefall.get(i).dx;
         }
         inBox = new Ball(followBallX(), followBallY());
     }
