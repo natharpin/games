@@ -122,6 +122,10 @@ public class Driver extends Application {
                 c.update();
             }
             
+            for(Powerup p : levels[currentLevel].powerups){
+                p.update();
+            }
+            
             dropArea.update();
             score += dropArea.checkCollisions(levels[currentLevel]);
         }
@@ -175,7 +179,7 @@ public class Driver extends Application {
         for(Powerup p : levels[currentLevel].powerups){
             p.render(gc);
         }
-
+      
         dropArea.render(gc);
 
         gc.setStroke(Color.BLACK);

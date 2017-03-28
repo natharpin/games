@@ -25,8 +25,8 @@ public class Coin extends Sprite {
 	}
 
 	public void render(GraphicsContext gc) {
-		imageArray[0] = new Image("front.png");
-		imageArray[1] = new Image("flip.png");
+		imageArray[0] = new Image("pics/front.png");
+		imageArray[1] = new Image("pics/flip.png");
     	gc.drawImage(imageArray[i/10], x, y);
 	}
 
