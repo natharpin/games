@@ -1,6 +1,7 @@
 package dropper.window;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import dropper.datastructures.Level;
 import dropper.datastructures.Point;
@@ -36,10 +37,14 @@ public class Levels {
 					},
 					coins.get(0), powers.get(0)),
 			//level 2
-			new Level(new Platform[] {}, 
+			new Level(new Platform[] {
+					new Platform(50, 500, 150, 50, 45),
+					new Platform(290, 370, 15, 190, 70),
+					new Platform(400, 640, 140, 20, 20)
+			}, 
 					new MovingPlatform[] {
-							 new MovingPlatform(10, 190, 70, 20, -30, new Point(WindowSettings.WIDTH - 70 - 10, 0), new Point(1, 0))
-							 //new MovingPlatform(WindowSettings.WIDTH-80, 190, 70, -20, -30, new Point(100, 0), new Point(-1, 0)),
+							 new MovingPlatform(10, 190, 70, 20, -30, new Point(WindowSettings.WIDTH - 70 - 10, 0), new Point(1, 0)),
+							 //new MovingPlatform(WindowSettings.WIDTH-80, 190, -20, 70, -30, new Point(100, 0), new Point(-1, 0)),
 					}, 
 					new SpinningPlatform[] {}, 
 					new Bucket[] {
@@ -101,7 +106,17 @@ public class Levels {
 	}
 
 	public void setLevelOne() {
-
+		for(int i = 0; i <10; i++){
+			Random randx = new Random();
+			Random randy = new Random();
+			int xr,yr;
+			xr = randx.nextInt(600 - 1 + 1) + 1;
+			yr = randy.nextInt(800 - 100 + 1) + 100;
+			coins.get(0).add(new Coin(xr, yr, 50));
+		}
+		
+		coins.get(0).add(new Coin(300, 300, 50));
+	
 	}
 
 	public void setLevelTwo() {
