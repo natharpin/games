@@ -5,6 +5,8 @@ import javafx.scene.image.Image;
 
 public class Ball extends Sprite{
 	
+    private Image image = new Image("pics/ball.png");
+    
     public Ball(double x, double y){
         this.x = x;
         this.y = y;
@@ -40,10 +42,7 @@ public class Ball extends Sprite{
     }
     
     public void render(GraphicsContext gc){
-//    	gc.setFill(Color.RED);
-//    	gc.fillOval(this.x, this.y, this.width, this.width);
-    	Image ballImage = new Image("pics/ball.png");
-    	gc.drawImage(ballImage, this.x, this.y);
+    	gc.drawImage(image, this.x, this.y);
     }
     
 }

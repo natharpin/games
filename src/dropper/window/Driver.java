@@ -76,7 +76,10 @@ public class Driver extends Application {
         if(score > 1000){
             score = 0;
             currentLevel++;
-            state = 1;
+            if(currentLevel >= 4)
+                state = 3;
+            else
+                state = 1;
         }
         
         if(dropArea.getLives() <= 0 && dropArea.isDead()){
@@ -124,6 +127,14 @@ public class Driver extends Application {
             gc.setStroke(Color.WHITE);
             gc.fillRect(0, 0, WindowSettings.WIDTH, WindowSettings.HEIGHT);
             gc.strokeText("You lose!", WindowSettings.WIDTH / 2 - 50, WindowSettings.HEIGHT / 2 - 10);
+            return;
+        }
+        
+        if(state == 4){
+            gc.setFill(Color.BLACK);
+            gc.setStroke(Color.WHITE);
+            gc.fillRect(0, 0, WindowSettings.WIDTH, WindowSettings.HEIGHT);
+            gc.strokeText("You win!", WindowSettings.WIDTH / 2 - 50, WindowSettings.HEIGHT / 2 - 10);
             return;
         }
         
