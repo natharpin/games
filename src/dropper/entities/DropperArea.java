@@ -141,7 +141,7 @@ public class DropperArea extends Sprite {
         for (int i = 0; i < inFreefall.size(); i++) {
             inFreefall.get(i).update();
             if (inFreefall.get(i).y > WindowSettings.HEIGHT) inFreefall.remove(i);
-            if (inFreefall.get(i).x < 0 || inFreefall.get(i).x > WindowSettings.WIDTH) inFreefall.remove(i);
+            if (inFreefall.get(i).x < 0 || inFreefall.get(i).x > WindowSettings.WIDTH) inFreefall.get(i).dx = -inFreefall.get(i).dx;
         }
         inBox = new Ball(followBallX(), followBallY());
     }
