@@ -17,6 +17,8 @@ public class Coin extends Sprite {
 		this.y = y;
 		this.width = size;
 		this.height = size;
+		imageArray[0] = new Image("pics/front.png");
+		imageArray[1] = new Image("pics/flip.png");		
 	}
 	
 	public void update() {
@@ -24,8 +26,6 @@ public class Coin extends Sprite {
 	}
 
 	public void render(GraphicsContext gc) {
-		imageArray[0] = new Image("pics/front.png");
-		imageArray[1] = new Image("pics/flip.png");
     	gc.drawImage(imageArray[i/10], x, y);
 	}
 
