@@ -34,6 +34,10 @@ public class DropperArea extends Sprite {
         return lives;
     }
     
+    public boolean isDead(){
+        return inFreefall.isEmpty();
+    }
+    
     public void click() {
         if (inFreefall.isEmpty()) {
             inFreefall.add(new Ball(followBallX(), followBallY()));
@@ -97,6 +101,7 @@ public class DropperArea extends Sprite {
                 if (level.coins.get(j).intersects(inFreefall.get(i).next())) {
                     score += 25;
                     level.coins.remove(j);
+                    j--;
                 }
             }
             
@@ -105,10 +110,14 @@ public class DropperArea extends Sprite {
                     if(level.powerups.get(k) instanceof SplitPowerup){
                         split(i);
                         level.powerups.remove(k);
+                        k--;
+                        continue;
                     }
-                    if(level.powerups.get(k) instanceof AddLifePowerup){
+                    else if(level.powerups.get(k) instanceof AddLifePowerup){
                         lives++;
                         level.powerups.remove(k);
+                        k--;
+                        continue;
                     }
                 }
             }

@@ -20,7 +20,6 @@ public class Coin extends Sprite {
 	}
 	
 	public void update() {
-		//Stationary coin, will add animation loop later
 		i=(i+1)%20;
 	}
 

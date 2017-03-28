@@ -105,7 +105,7 @@ public class Driver extends Application {
             state = 1;
         }
         
-        if(dropArea.getLives() <= 0){
+        if(dropArea.getLives() <= 0 && dropArea.isDead()){
             state = 3;
         }
         
