@@ -65,6 +65,7 @@ public class Driver extends Application {
     Level levels[] = new Level[1];
 
     void initLevels() {
+       // levels = Levels.getLevels();
         levels = Levels.getLevels();
     }
 
