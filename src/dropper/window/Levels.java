@@ -102,10 +102,11 @@ public class Levels {
 		powers.add(power2);
 		powers.add(power3);
 		powers.add(power4);
+		setLevelOne();
 		return levels(coins, powers);
 	}
 
-	public void setLevelOne() {
+	public static void setLevelOne() {
 		for(int i = 0; i <10; i++){
 			Random randx = new Random();
 			Random randy = new Random();
@@ -114,21 +115,39 @@ public class Levels {
 			yr = randy.nextInt(800 - 100 + 1) + 100;
 			coins.get(0).add(new Coin(xr, yr, 50));
 		}
-		
-		coins.get(0).add(new Coin(300, 300, 50));
-	
 	}
 
-	public void setLevelTwo() {
-
+	public static  void setLevelTwo() {
+        for(int i = 0; i <10; i++){
+            Random randx = new Random();
+            Random randy = new Random();
+            int xr,yr;
+            xr = randx.nextInt(600 - 1 + 1) + 1;
+            yr = randy.nextInt(800 - 100 + 1) + 100;
+            coins.get(1).add(new Coin(xr, yr, 50));
+        }
 	}
 
-	public void setLevelThree() {
-
+	public static  void setLevelThree() {
+        for(int i = 0; i <10; i++){
+            Random randx = new Random();
+            Random randy = new Random();
+            int xr,yr;
+            xr = randx.nextInt(600 - 1 + 1) + 1;
+            yr = randy.nextInt(800 - 100 + 1) + 100;
+            coins.get(2).add(new Coin(xr, yr, 50));
+        }
 	}
 
-	public void setLevelFour() {
-
+	public static  void setLevelFour() {
+        for(int i = 0; i <10; i++){
+            Random randx = new Random();
+            Random randy = new Random();
+            int xr,yr;
+            xr = randx.nextInt(600 - 1 + 1) + 1;
+            yr = randy.nextInt(800 - 100 + 1) + 100;
+            coins.get(3).add(new Coin(xr, yr, 50));
+        }
 	}
 
 }
