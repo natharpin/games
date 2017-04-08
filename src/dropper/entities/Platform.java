@@ -82,7 +82,6 @@ public class Platform extends Sprite {
                     numIntersections++;
             }
             if (numIntersections % 2 != 0) {
-                System.out.println("Ball intersects platform");
                 return true;
             }
         }
@@ -96,10 +95,10 @@ public class Platform extends Sprite {
         double angle = theta % 90;
         int quadrant = (int) (theta / 90);
         
-        double cxx = quadrant != 1 ? (width / 2) * Math.cos(Math.toRadians(angle)) : (width / 2) * Math.cos(Math.toRadians(90 - angle));
-        double cxy = quadrant != 1 ? (width / 2) * Math.sin(Math.toRadians(angle)) : (width / 2) * Math.sin(Math.toRadians(90 - angle));
-        double cyx = quadrant != 1 ? (height / 2) * Math.cos(Math.toRadians(90 - angle)) : (height / 2) * Math.cos(Math.toRadians(angle));
-        double cyy = quadrant != 1 ? (height / 2) * Math.sin(Math.toRadians(90 - angle)) : (height / 2) * Math.sin(Math.toRadians(angle));
+        double cxx = (quadrant % 2) != 1 ? (width / 2) * Math.cos(Math.toRadians(angle)) : (width / 2) * Math.cos(Math.toRadians(90 - angle));
+        double cxy = (quadrant % 2) != 1 ? (width / 2) * Math.sin(Math.toRadians(angle)) : (width / 2) * Math.sin(Math.toRadians(90 - angle));
+        double cyx = (quadrant % 2) != 1 ? (height / 2) * Math.cos(Math.toRadians(90 - angle)) : (height / 2) * Math.cos(Math.toRadians(angle));
+        double cyy = (quadrant % 2) != 1 ? (height / 2) * Math.sin(Math.toRadians(90 - angle)) : (height / 2) * Math.sin(Math.toRadians(angle));
         
         double cx = x;
         double cy = y;
@@ -107,7 +106,7 @@ public class Platform extends Sprite {
         switch(quadrant){
             case 0:
                 cx+= cxx + cyx;
-                cy+= cxy + cyy;
+                cy+= -cxy + cyy;
                 break;
             case 1:
                 cx+= cyx - cxx;
@@ -118,8 +117,8 @@ public class Platform extends Sprite {
                 cy+= (cxy - cyy);
                 break;
             case 3:
-                cx-= cxx - cyx;
-                cy-= (-cxy - cyy);
+                cx+= cxx - cyx;
+                cy+= cxy + cyy;
                 break;
         }
 
@@ -140,11 +139,6 @@ public class Platform extends Sprite {
         double negBottomLeftCorner = -topLeftCorner;
         double negTopLeftCorner = -bottomLeftCorner;
         double negTopRightCorner = -bottomRightCorner;
-
-        System.out.println(topRightCorner);
-        System.out.println(topLeftCorner);
-        System.out.println(bottomLeftCorner);
-        System.out.println(bottomRightCorner);
         
         if (angleToBall >= 0) {
             if (angleToBall >= 0 && (angleToBall < topRightCorner || angleToBall > bottomLeftCorner)) {
@@ -183,16 +177,8 @@ public class Platform extends Sprite {
         Vector dotXnormalX2 = dotXnormal.mult(1);
         Vector resultVec = incoming.add(dotXnormalX2);
 
-        System.out.println(normal.toString());
-        System.out.println(incoming.toString());
-        System.out.println(dot);
-        System.out.println(dotXnormal.toString());
-        System.out.println(dotXnormalX2.toString());
-        System.out.println(resultVec.toString());
-
         Point result = resultVec.end();
 
-        System.out.println(result.toString());
         ball.dx += result.getX();
         ball.dy -= result.getY();
     }
@@ -204,38 +190,5 @@ public class Platform extends Sprite {
     public void render(GraphicsContext gc) {
         gc.setFill(Color.BLUE);
         gc.fillPolygon(xCoordinates(), yCoordinates(), vertices.length);
-
-        double angle = theta % 90;
-        int quadrant = (int) (theta / 90);
-        
-        double cxx = quadrant != 1 ? (width / 2) * Math.cos(Math.toRadians(angle)) : (width / 2) * Math.cos(Math.toRadians(90 - angle));
-        double cxy = quadrant != 1 ? (width / 2) * Math.sin(Math.toRadians(angle)) : (width / 2) * Math.sin(Math.toRadians(90 - angle));
-        double cyx = quadrant != 1 ? (height / 2) * Math.cos(Math.toRadians(90 - angle)) : (height / 2) * Math.cos(Math.toRadians(angle));
-        double cyy = quadrant != 1 ? (height / 2) * Math.sin(Math.toRadians(90 - angle)) : (height / 2) * Math.sin(Math.toRadians(angle));
-        
-        double cx = x;
-        double cy = y;
-        
-        switch(quadrant){
-            case 0:
-                cx+= cxx + cyx;
-                cy+= -cxy + cyy;
-                break;
-            case 1:
-                cx+= cyx - cxx;
-                cy-= cxy + cyy;
-                break;
-            case 2:
-                cx+= (-cxx - cyx);
-                cy+= (cxy - cyy);
-                break;
-            case 3:
-                cx+= cxx - cyx;
-                cy+= cxy + cyy;
-                break;
-        }
-        
-        gc.strokeLine(x, y, cx, cy);
-        
     }
 }
