@@ -63,8 +63,8 @@ public class NetTankWar extends Application {
 	// private static final String HOST = "pascal.mscs.mu.edu";
 
 	public void initialize() {
-		redtank = new Image("redtank.png");
-		bluetank = new Image("bluetank.png");
+		redtank = new Image("assets/netwar/redtank.png");
+		bluetank = new Image("assets/netwar/bluetank.png");
 
 		makeContact();
 	}
@@ -199,6 +199,10 @@ public class NetTankWar extends Application {
 		tanks.get(1 - playerID).processMove(s);
 	}
 
+	public void processShot(String s) {
+		tanks.get(1 - playerID).processShot(s);
+	}
+	
 	public static int hitAnItem(Ball b, ArrayList<? extends Ball> c) {
 		// Check if b has run into any element of c. If so
 		// return the index of the first item that was hit,
@@ -486,12 +490,13 @@ class Tank implements Ball {
 				prevfo = forth;
 			}
 		}
+		count--;
 		if (fire) {
-			fireBullet();
+			fireBullet(true);
 		}
 		// Update all of our bullets
 		for (Bullet b : bullets)
-			b.update();
+			b.update(local);
 	}
 
 	public void processMove(String s) {
@@ -513,6 +518,10 @@ class Tank implements Ball {
 		locY = sc.nextDouble();
 		angle = sc.nextDouble();
 	}
+	
+	public void processShot(String s){
+		fireBullet(false);
+	}
 
 	void render(GraphicsContext gc) {
 		// Use the affine transform
@@ -532,9 +541,7 @@ class Tank implements Ball {
 
 	}
 
-	void fireBullet() {
-		// If it has been long enough since the last shot...
-		count--;
+	void fireBullet(boolean local) {
 		if (count > 0)
 			return;
 		// ...and if all the bullets aren't currently in use...
@@ -542,6 +549,7 @@ class Tank implements Ball {
 		if (slot < 0)
 			return;
 		// ...then launch a new bullet
+		if(local) NetTankWar.send("shoot");
 		bullets[slot].setLocation(locX, locY);
 		bullets[slot].setDirection(angle);
 		bullets[slot].reset();
@@ -593,7 +601,7 @@ class Bullet implements Ball {
 		tank = t;
 	}
 
-	void update() {
+	void update(boolean hasAuthoritytoHit) {
 		int i;
 		// Check if this bullet is worn out
 		ttl--;
@@ -609,15 +617,19 @@ class Bullet implements Ball {
 		if (i >= 0) {
 			alive = false;
 			// Ask the game to deactivate this rock
-			NetTankWar.removeRock(i);
+			if(hasAuthoritytoHit){
+				NetTankWar.removeRock(i);
+				NetTankWar.send("destroy " + i);
+			}
 		}
 		// check for collisions with tanks (other than
 		// our tank)
 		i = NetTankWar.hitAnItem(this, NetTankWar.tanks);
-		if ((i >= 0) && (i != tank)) {
+		if ((i >= 0) && (i != tank) && !hasAuthoritytoHit) {
 			alive = false;
 			// Tell game a tank was hit
 			NetTankWar.tankHit(i);
+			NetTankWar.send("hit");
 		}
 	}
 
