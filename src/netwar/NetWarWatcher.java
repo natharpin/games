@@ -53,8 +53,11 @@ public class NetWarWatcher extends Thread {
 				else if (line.startsWith("shoot"))
 					ntw.processShot(line);
 				else if (line.startsWith("destroy")) {
-					int rock = Integer.parseInt(line.substring(line.indexOf(' ') + 1));
-					NetTankWar.removeRock(rock);
+					String words[] = line.split(" ");
+					int rock = Integer.parseInt(words[2]);
+					int tank = Integer.parseInt(words[4]);
+					int bullet = Integer.parseInt(words[6]);
+					NetTankWar.bulletHitRock(rock, tank, bullet);
 				} 
 				else if(line.startsWith("hit"))
 					NetTankWar.tankHit(1 - ntw.playerID);

@@ -176,6 +176,11 @@ public class NetTankWar extends Application {
 			sb.append(r.getIntX() + " " + r.getIntY() + " " + r.getDiameter() + ";");
 		return new String(sb);
 	}
+	
+	public static void bulletHitRock(int rock, int tank, int bullet){
+		removeRock(rock);
+		tanks.get(tank).bullets[bullet].alive = false;
+	}
 
 	public static void stringToRocks(String s) {
 		// read the rocks string and fill in the ArrayList
@@ -495,8 +500,11 @@ class Tank implements Ball {
 			fireBullet(true);
 		}
 		// Update all of our bullets
-		for (Bullet b : bullets)
-			b.update(local);
+		int i = 0;
+		for (Bullet b : bullets){
+			b.update(local, i);
+			i++;
+		}
 	}
 
 	public void processMove(String s) {
@@ -517,6 +525,7 @@ class Tank implements Ball {
 		locX = sc.nextDouble();
 		locY = sc.nextDouble();
 		angle = sc.nextDouble();
+		sc.close();
 	}
 	
 	public void processShot(String s){
@@ -601,7 +610,7 @@ class Bullet implements Ball {
 		tank = t;
 	}
 
-	void update(boolean hasAuthoritytoHit) {
+	void update(boolean hasAuthoritytoHit, int index) {
 		int i;
 		// Check if this bullet is worn out
 		ttl--;
@@ -619,7 +628,7 @@ class Bullet implements Ball {
 			// Ask the game to deactivate this rock
 			if(hasAuthoritytoHit){
 				NetTankWar.removeRock(i);
-				NetTankWar.send("destroy " + i);
+				NetTankWar.send("destroy rock " + i + " tank " + tank + " bullet " + index);
 			}
 		}
 		// check for collisions with tanks (other than
