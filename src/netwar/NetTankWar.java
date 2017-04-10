@@ -50,7 +50,8 @@ public class NetTankWar extends Application {
 
 	static boolean roundOver = true;
 	static int loser;
-
+	static int redScore, blueScore;
+	
 	static boolean ready = false;
 
 	Font font = Font.font("Monospaced", FontPosture.REGULAR, 30.0);
@@ -231,6 +232,11 @@ public class NetTankWar extends Application {
 		if (!roundOver) {
 			roundOver = true;
 			loser = k;
+			if(loser==1)
+				redScore+=1;
+			else
+				blueScore+=1;
+			
 		}
 	}
 
@@ -261,6 +267,9 @@ public class NetTankWar extends Application {
 			gc.setFill(Color.BLACK);
 			gc.setFont(font);
 			gc.fillText("Round Over: " + (loser == RED ? "Blue" : "Red") + " tank wins!", 150, 200);
+			System.out.println("red" + redScore);
+			System.out.println("blue" + blueScore);
+			resetRound();
 		}
 	}
 
