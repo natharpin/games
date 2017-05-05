@@ -46,10 +46,6 @@ public class Runner extends Application {
 
     private ArrayList<Shape3D> platforms = new ArrayList<Shape3D>();
 
-    private Sphere goal;
-    private BorderPane borderPane;
-    private boolean complete = false;
-
     private void constructWorld(Group root) {
 
         final PhongMaterial voidMaterial = new PhongMaterial();
@@ -74,131 +70,48 @@ public class Runner extends Application {
         homePlatform.setTranslateY(30);
         homePlatform.setTranslateZ(0);
         platforms.add(homePlatform);
+        
+        Box bottom = new Box(200, 10, 100);
+        bottom.setMaterial(platformMaterial);
+        bottom.setTranslateX(0);
+        bottom.setTranslateY(30);
+        bottom.setTranslateZ(200);
+        platforms.add(bottom);
+        
+        Box bottomLeft = new Box(200, 10, 100);
+        bottomLeft.setMaterial(platformMaterial);
+        bottomLeft.setTranslateX(-175);
+        bottomLeft.setTranslateY(-43);
+        bottomLeft.setTranslateZ(200);
+        bottomLeft.setRotate(45);
+        platforms.add(bottomLeft);
+        
+        Box bottomRight = new Box(200, 10, 100);
+        bottomRight.setMaterial(platformMaterial);
+        bottomRight.setTranslateX(175);
+        bottomRight.setTranslateY(-43);
+        bottomRight.setTranslateZ(200);
+        bottomRight.setRotate(-45);
+        platforms.add(bottomRight);
 
-        // The first step
-        Box step1 = new Box(50, 10, 50);
-        step1.setMaterial(platformMaterial);
-        step1.setTranslateX(0);
-        step1.setTranslateY(0);
-        step1.setTranslateZ(150);
-        platforms.add(step1);
-
-        Box step2 = new Box(100, 10, 100);
-        step2.setMaterial(platformMaterial);
-        step2.setTranslateX(0);
-        step2.setTranslateY(-20);
-        step2.setTranslateZ(300);
-        platforms.add(step2);
-
-        Box step3 = new Box(100, 10, 100);
-        step3.setMaterial(platformMaterial);
-        step3.setTranslateX(0);
-        step3.setTranslateY(-20);
-        step3.setTranslateZ(500);
-
-        TranslateTransition tt = new TranslateTransition(Duration.millis(1000), step3);
-        tt.setAutoReverse(true);
-        tt.setCycleCount(Animation.INDEFINITE);
-        tt.setFromZ(500);
-        tt.setToZ(600);
-        tt.play();
-
-        platforms.add(step3);
-
-        Cylinder step4sub1 = new Cylinder(15, 200);
-        step4sub1.setMaterial(platformMaterial);
-        step4sub1.setTranslateX(0);
-        step4sub1.setRotate(90);
-        step4sub1.setTranslateY(-20);
-        step4sub1.setTranslateZ(800);
-        platforms.add(step4sub1);
-
-        RotateTransition rt = new RotateTransition(Duration.millis(3000), step4sub1);
-        rt.setCycleCount(Animation.INDEFINITE);
-        rt.setAxis(Rotate.Z_AXIS);
-        rt.setByAngle(360);
-        rt.play();
-
-        Cylinder step4sub2 = new Cylinder(15, 200);
-        step4sub2.setMaterial(platformMaterial);
-        step4sub2.setTranslateX(0);
-        step4sub2.setRotationAxis(Rotate.X_AXIS);
-        step4sub2.setRotate(90);
-        step4sub2.setTranslateY(-20);
-        step4sub2.setTranslateZ(800);
-        platforms.add(step4sub2);
-
-        Box step5sub1 = new Box(200, 10, 20);
-        step5sub1.setMaterial(platformMaterial);
-        step5sub1.setTranslateX(0);
-        step5sub1.setTranslateY(30);
-        step5sub1.setTranslateZ(1000);
-        platforms.add(step5sub1);
-
-        TranslateTransition tt1 = new TranslateTransition(Duration.millis(1000), step5sub1);
-        tt1.setAutoReverse(true);
-        tt1.setCycleCount(Animation.INDEFINITE);
-        tt1.setByX(100);
-        tt1.play();
-
-        Box step5sub2 = new Box(200, 10, 20);
-        step5sub2.setMaterial(platformMaterial);
-        step5sub2.setTranslateX(0);
-        step5sub2.setTranslateY(100);
-        step5sub2.setTranslateZ(1150);
-        platforms.add(step5sub2);
-
-        TranslateTransition tt2 = new TranslateTransition(Duration.millis(1500), step5sub2);
-        tt2.setAutoReverse(true);
-        tt2.setCycleCount(Animation.INDEFINITE);
-        tt2.setByX(-150);
-        tt2.play();
-
-        Box step5sub3 = new Box(200, 10, 20);
-        step5sub3.setMaterial(platformMaterial);
-        step5sub3.setTranslateX(-200);
-        step5sub3.setTranslateY(30);
-        step5sub3.setTranslateZ(1300);
-        platforms.add(step5sub3);
-
-        TranslateTransition tt3 = new TranslateTransition(Duration.millis(4000), step5sub3);
-        tt3.setAutoReverse(true);
-        tt3.setCycleCount(Animation.INDEFINITE);
-        tt3.setByX(300);
-        tt3.play();
-
-        Box finalPlatform = new Box(200, 10, 200);
-        finalPlatform.setMaterial(platformMaterial);
-        finalPlatform.setTranslateX(0);
-        finalPlatform.setTranslateY(-30);
-        finalPlatform.setTranslateZ(1600);
-        platforms.add(finalPlatform);
-
-        final PhongMaterial goalMaterial = new PhongMaterial();
-        goalMaterial.setDiffuseColor(Color.rgb(100, 0, 0, 0.5));
-        goalMaterial.setSpecularColor(Color.PINK);
-
-        goal = new Sphere(10);
-        goal.setMaterial(goalMaterial);
-        goal.setTranslateX(0);
-        goal.setTranslateY(-60);
-        goal.setTranslateZ(1600);
-
-        Text text = new Text();
-        text.setText("You won!");
-        text.setStyle("-fx-font-size: 20;");
-        text.setCache(true);
-
-        borderPane = new BorderPane();
-        borderPane.setStyle("-fx-border-color: black;-fx-background-color: #66CCFF;");
-        borderPane.setTop(text);
-        borderPane.setTranslateX(-45);
-        borderPane.setTranslateY(-90);
-        borderPane.setTranslateZ(1700);
-        borderPane.setOpacity(0);
+        Box middleLeft = new Box(200, 10, 100);
+        middleLeft.setMaterial(platformMaterial);
+        middleLeft.setTranslateX(-247);
+        middleLeft.setTranslateY(-220);
+        middleLeft.setTranslateZ(200);
+        middleLeft.setRotate(90);
+        platforms.add(middleLeft);
+        
+        Box topLeft = new Box(200, 10, 100);
+        topLeft.setMaterial(platformMaterial);
+        topLeft.setTranslateX(-175);
+        topLeft.setTranslateY(-397);
+        topLeft.setTranslateZ(200);
+        topLeft.setRotate(-45);
+        platforms.add(topLeft);
 
         root.getChildren().addAll(platforms);
-        root.getChildren().addAll(goal, borderPane, voidBox);
+        root.getChildren().addAll(voidBox);
     }
 
     // Keeps track of the player's movement, particularly jumping
@@ -237,9 +150,6 @@ public class Runner extends Application {
             // What key did the user press?
             KeyCode keycode = event.getCode();
 
-            // If the player has reached the end, don't move anymore
-            if (complete) return;
-
             if (keycode == KeyCode.A) delta = new Point3D(-5, delta.getY(), delta.getZ());
             if (keycode == KeyCode.D) delta = new Point3D(5, delta.getY(), delta.getZ());
             if (keycode == KeyCode.W) delta = new Point3D(delta.getX(), delta.getY(), 5);
@@ -251,9 +161,6 @@ public class Runner extends Application {
         scene.setOnKeyReleased(event -> {
             KeyCode keycode = event.getCode();
 
-            // If the player has reached the goal, don't move anymore
-            if (complete) return;
-
             if (keycode == KeyCode.A) delta = new Point3D(0, delta.getY(), delta.getZ());
             if (keycode == KeyCode.D) delta = new Point3D(0, delta.getY(), delta.getZ());
             if (keycode == KeyCode.W) delta = new Point3D(delta.getX(), delta.getY(), 0);
@@ -262,7 +169,6 @@ public class Runner extends Application {
 
         // Use mouse to control camera rotation
         scene.setOnMousePressed(me -> {
-            if (complete) return;
             mousePosX = me.getSceneX();
         });
 
@@ -270,7 +176,6 @@ public class Runner extends Application {
         // up it would mess up my movement scheme and nothing here is so high or
         // low that you need to look up or down
         scene.setOnMouseDragged(me -> {
-            if (complete) return;
             mouseOldX = mousePosX;
             mousePosX = me.getSceneX();
             mouseDeltaX = (mousePosX - mouseOldX);
@@ -310,17 +215,11 @@ public class Runner extends Application {
                 resting = true;
                 delta = new Point3D(delta.getX(), 0, delta.getZ());
                 cameraDolly.setTranslateY(shape.getTranslateY() - 50);
+                cameraDolly.setRotate(shape.getRotate());
             }
         }
         // If the camera is in the air, make it fall down
         if (!resting) delta = delta.add(0, 0.5, 0);
-
-        // If the player has reached the goal, end the game
-        if (player.getBoundsInParent().intersects(goal.getBoundsInParent())) {
-            borderPane.setOpacity(1);
-            complete = true;
-            delta = new Point3D(0, 0, 0);
-        }
 
         // If the player has fallen off the edge, reset position to the
         // beginning
