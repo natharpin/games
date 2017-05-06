@@ -4,23 +4,16 @@ import java.util.ArrayList;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
-import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.geometry.Point3D;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
-import javafx.scene.shape.Cylinder;
-import javafx.scene.shape.Shape3D;
-import javafx.scene.shape.Sphere;
-import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -43,8 +36,10 @@ public class Runner extends Application {
     private double mousePosX;
     private double mouseOldX;
     private double mouseDeltaX;
+    
+    private int inAir = 2;
 
-    private ArrayList<Shape3D> platforms = new ArrayList<Shape3D>();
+    private ArrayList<Platform> platforms = new ArrayList<Platform>();
 
     private void constructWorld(Group root) {
 
@@ -64,54 +59,16 @@ public class Runner extends Application {
         platformMaterial.setSpecularColor(Color.LIGHTGREEN);
 
         // Beginning platform, starts right underneath the player
-        Box homePlatform = new Box(100, 10, 100);
-        homePlatform.setMaterial(platformMaterial);
-        homePlatform.setTranslateX(0);
-        homePlatform.setTranslateY(30);
-        homePlatform.setTranslateZ(0);
+        Platform homePlatform = new Platform(0, 30, 0, platformMaterial);
         platforms.add(homePlatform);
-        
-        Box bottom = new Box(200, 10, 100);
-        bottom.setMaterial(platformMaterial);
-        bottom.setTranslateX(0);
-        bottom.setTranslateY(30);
-        bottom.setTranslateZ(200);
-        platforms.add(bottom);
-        
-        Box bottomLeft = new Box(200, 10, 100);
-        bottomLeft.setMaterial(platformMaterial);
-        bottomLeft.setTranslateX(-175);
-        bottomLeft.setTranslateY(-43);
-        bottomLeft.setTranslateZ(200);
-        bottomLeft.setRotate(45);
-        platforms.add(bottomLeft);
-        
-        Box bottomRight = new Box(200, 10, 100);
-        bottomRight.setMaterial(platformMaterial);
-        bottomRight.setTranslateX(175);
-        bottomRight.setTranslateY(-43);
-        bottomRight.setTranslateZ(200);
-        bottomRight.setRotate(-45);
-        platforms.add(bottomRight);
 
-        Box middleLeft = new Box(200, 10, 100);
-        middleLeft.setMaterial(platformMaterial);
-        middleLeft.setTranslateX(-247);
-        middleLeft.setTranslateY(-220);
-        middleLeft.setTranslateZ(200);
-        middleLeft.setRotate(90);
-        platforms.add(middleLeft);
-        
-        Box topLeft = new Box(200, 10, 100);
-        topLeft.setMaterial(platformMaterial);
-        topLeft.setTranslateX(-175);
-        topLeft.setTranslateY(-397);
-        topLeft.setTranslateZ(200);
-        topLeft.setRotate(-45);
-        platforms.add(topLeft);
+        Row row = new Row(200, 1, platformMaterial, root);
+        platforms.addAll(row.platforms);
+        root.getChildren().add(row.group);
 
-        root.getChildren().addAll(platforms);
-        root.getChildren().addAll(voidBox);
+        for(Platform platform : platforms)
+            root.getChildren().add(platform.box);
+        root.getChildren().add(voidBox);
     }
 
     // Keeps track of the player's movement, particularly jumping
@@ -155,7 +112,12 @@ public class Runner extends Application {
             if (keycode == KeyCode.W) delta = new Point3D(delta.getX(), delta.getY(), 5);
             if (keycode == KeyCode.S) delta = new Point3D(delta.getX(), delta.getY(), -5);
             // Jump
-            if (keycode == KeyCode.SPACE) delta = new Point3D(delta.getX(), -change / 2, delta.getZ());
+            if (keycode == KeyCode.SPACE){
+                if(inAir > 0){
+                    inAir--;
+                    delta = new Point3D(delta.getX(), -change / 2, delta.getZ());
+                }
+            }
         });
 
         scene.setOnKeyReleased(event -> {
@@ -196,6 +158,8 @@ public class Runner extends Application {
         primaryStage.show();
     }
 
+    private double lastRow = 0;
+    
     public void update() {
         // Move the camera
         Point3D delta2 = camera.localToParent(delta);
@@ -209,13 +173,14 @@ public class Runner extends Application {
         player.setTranslateX(cameraDolly.getTranslateX());
         player.setTranslateY(cameraDolly.getTranslateY());
         player.setTranslateZ(cameraDolly.getTranslateZ());
+        player.setRotate(cameraDolly.getRotate());
         boolean resting = false;
-        for (Shape3D shape : platforms) {
-            if (player.getBoundsInParent().intersects(shape.getBoundsInParent())) {
+        for (Platform platform : platforms) {
+            if (player.getBoundsInParent().intersects(platform.box.getBoundsInParent())) {
                 resting = true;
                 delta = new Point3D(delta.getX(), 0, delta.getZ());
-                cameraDolly.setTranslateY(shape.getTranslateY() - 50);
-                cameraDolly.setRotate(shape.getRotate());
+                cameraDolly.setTranslateY(platform.box.getTranslateY() - 50);
+                inAir = 2;
             }
         }
         // If the camera is in the air, make it fall down
@@ -227,6 +192,10 @@ public class Runner extends Application {
             cameraDolly.setTranslateX(0);
             cameraDolly.setTranslateY(0);
             cameraDolly.setTranslateZ(0);
+        }
+        
+        if(lastRow - System.currentTimeMillis() > 10000){
+            
         }
     }
 
